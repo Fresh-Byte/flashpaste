@@ -1,0 +1,4 @@
+.mode csv
+.output Common.csv
+select * from common;
+.exit
