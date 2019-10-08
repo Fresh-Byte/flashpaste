@@ -54,7 +54,6 @@ Next
 
 fileXML.WriteLine "<?xml version=""1.0"" encoding=""UTF-8""?>"
 
-
 Dim i
 For i=0 to rootItems.Count-1
 	Dim rootItem
