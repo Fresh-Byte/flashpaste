@@ -61,7 +61,7 @@ For i=0 to rootItems.Count-1
 	Set rootItem = rootItems.Item(i)
 	stdout.WriteLine rootItem.name + ": " + Cstr(rootItem.getChildrenCount())
 	
-	Call rootItem.serialize(fileXML)
+	Call rootItem.serialize(fileXML, 0)
 Next
 
 
@@ -88,11 +88,8 @@ Class Entry
 		For cursor=1 to Len(row)
 			char = Mid(row, cursor, 1)
 			If (char = """") Then
-				m_token = m_token + char
 				m_tokensFinished = Not m_tokensFinished
-			ElseIf (char = Chr(10)) Then
-				m_token = m_token + char
-				stdout.WriteLine "TEST"
+			
 			ElseIf (char = ",") Then
 				If (m_tokensFinished) Then
 					m_columnsValues.add m_token
@@ -173,22 +170,22 @@ Class Entry
 		getChildrenCount = m_children.Count
 	End Function
 	
-	Public Sub serialize(fileXML)
-		fileXML.WriteLine "<entry name=""" + Me.name + """>"
+	Public Sub serialize(fileXML, level)
+		fileXML.WriteLine String(level, " ") + "<entry name=""" + Me.name + """>"
 		
 		If (Me.eType = 2) Then
-			fileXML.WriteLine "<![CDATA[" + Me.data + "]]>"
+			fileXML.WriteLine String((level + 1), " ") + "<![CDATA[" + Me.data + "]]>"
 		End If
 		
-		fileXML.WriteLine "<children count=""" + Cstr(m_children.Count) + """>"
+		fileXML.WriteLine String((level + 1), " ") + "<children count=""" + Cstr(m_children.Count) + """>"
 		Dim i
 		For i=0 to m_children.Count-1
 			Dim child
 			Set child = m_children.Item(i)
-			Call child.serialize(fileXML)
+			Call child.serialize(fileXML, (level + 2))
 		Next
-		fileXML.WriteLine "</children>"
+		fileXML.WriteLine String((level + 1), " ") + "</children>"
 		
-		fileXML.WriteLine "</entry>"
+		fileXML.WriteLine String(level, " ") + "</entry>"
 	End Sub
 End Class
