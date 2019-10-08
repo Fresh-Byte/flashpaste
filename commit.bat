@@ -10,8 +10,13 @@ set second=%TIME:~6,2%
 
 set datetime=%year%.%month%.%day%_%hour%.%minute%.%second%
 
-del Common.csv
-del Common.xml
+if exist Common.csv (
+	del Common.csv
+)
+
+if exist Common.csv (
+	del Common.csv 
+)
 .\tools\sqlite3.exe Common.db < .\tools\commands.txt
 start /wait "" cmd /c cscript /nologo .\tools\converter.vbs
 del Common.csv
